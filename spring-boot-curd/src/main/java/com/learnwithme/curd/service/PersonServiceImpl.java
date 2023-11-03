@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.learnwithme.curd.entity.Person;
@@ -52,29 +53,31 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public String deletePerson(int id) throws Exception {
-		try {
-			if(isPersonPresent(id)) {
+		if (isPersonPresent(id)) {
+			try {
 				personRepository.deleteById(id);
 				return "deleted";
-			}else {
-				throw new UnExceptedError("No Person is found with this id: "+id);
+			} catch (EmptyResultDataAccessException ex) {
+				throw new UnExceptedError("No Person is found with this id: " + id);
+			} catch (Exception ex) {
+				throw new UnExceptedError("Unable to delete person");
 			}
-		} catch (Exception e) {
-			throw new UnExceptedError("Unable to delete person");
+		} else {
+			throw new UnExceptedError("No Person is found with this id: " + id);
 		}
 	}
 
 	@Override
 	public String updatePerson(Person person) throws Exception {
-		try {
-			if(isPersonPresent(person.getId())) {
+		if (isPersonPresent(person.getId())) {
+			try {
 				personRepository.save(person);
 				return "updated";
-			}else {
-				throw new UnExceptedError("No Person is found");	
+			} catch (Exception e) {
+				throw new UnExceptedError("Unable to update person");
 			}
-		} catch (Exception e) {
-			throw new UnExceptedError("Unable to update person");
+		} else {
+			throw new UnExceptedError("No Person is found");
 		}
 	}
 
