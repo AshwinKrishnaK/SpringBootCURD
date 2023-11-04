@@ -9,7 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.learnwithme.curd.entity.Person;
-import com.learnwithme.curd.exception.UnExceptedError;
+import com.learnwithme.curd.exception.UnExpectedError;
 import com.learnwithme.curd.repository.PersonRepository;
 
 /**
@@ -31,7 +31,7 @@ public class PersonServiceImpl implements PersonService {
 			return personRepository.findAll();
 		} catch (Exception e) {
 			logger.error("Error occured while getAllPersons method ", e);
-			throw new UnExceptedError("Unable to fetch all data");
+			throw new UnExpectedError("Unable to fetch all data");
 		}
 	}
 
@@ -47,7 +47,7 @@ public class PersonServiceImpl implements PersonService {
 			personRepository.save(person);
 			return "saved";
 		} catch (Exception e) {
-			throw new UnExceptedError("Unable to save person");
+			throw new UnExpectedError("Unable to save person");
 		}
 	}
 
@@ -58,12 +58,12 @@ public class PersonServiceImpl implements PersonService {
 				personRepository.deleteById(id);
 				return "deleted";
 			} catch (EmptyResultDataAccessException ex) {
-				throw new UnExceptedError("No Person is found with this id: " + id);
+				throw new UnExpectedError("No Person is found with this id: " + id);
 			} catch (Exception ex) {
-				throw new UnExceptedError("Unable to delete person");
+				throw new UnExpectedError("Unable to delete person");
 			}
 		} else {
-			throw new UnExceptedError("No Person is found with this id: " + id);
+			throw new UnExpectedError("No Person is found with this id: " + id);
 		}
 	}
 
@@ -74,10 +74,10 @@ public class PersonServiceImpl implements PersonService {
 				personRepository.save(person);
 				return "updated";
 			} catch (Exception e) {
-				throw new UnExceptedError("Unable to update person");
+				throw new UnExpectedError("Unable to update person");
 			}
 		} else {
-			throw new UnExceptedError("No Person is found");
+			throw new UnExpectedError("No Person is found");
 		}
 	}
 
